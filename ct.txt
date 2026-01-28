@@ -1,0 +1,527 @@
+STACK
+
+#include <stdio.h>
+
+#define MAX 10
+
+int stack[MAX];
+int top = -1;
+
+/* Hàm thêm phần tử vào stack */
+void push(int x) {
+    if (top == MAX - 1) {
+        printf("Stack day!\n");
+        return;
+    }
+    top++;
+    stack[top] = x;
+}
+
+/* Hàm lấy phần tử ra khỏi stack */
+int pop() {
+    if (top == -1) {
+        printf("Stack rong!\n");
+        return -1;
+    }
+    int x = stack[top];
+    top--;
+    return x;
+}
+
+/* In stack */
+void printStack() {
+    if (top == -1) {
+        printf("Stack rong!\n");
+        return;
+    }
+    for (int i = top; i >= 0; i--) {
+        printf("%d ", stack[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    printf("=== STACK ===\n");
+
+    push(10);
+    push(20);
+    push(30);
+
+    printStack();
+
+    printf("Pop: %d\n", pop());
+    printStack();
+
+    return 0;
+}
+
+
+QUEUE
+
+#include <stdio.h>
+
+#define MAX 10
+
+int queue[MAX];
+int front = 0;
+int rear = -1;
+
+/* Thêm phần tử vào queue */
+void enqueue(int x) {
+    if (rear == MAX - 1) {
+        printf("Queue day!\n");
+        return;
+    }
+    rear++;
+    queue[rear] = x;
+}
+
+/* Lấy phần tử khỏi queue */
+int dequeue() {
+    if (front > rear) {
+        printf("Queue rong!\n");
+        return -1;
+    }
+    int x = queue[front];
+    front++;
+    return x;
+}
+
+/* In queue */
+void printQueue() {
+    if (front > rear) {
+        printf("Queue rong!\n");
+        return;
+    }
+    for (int i = front; i <= rear; i++) {
+        printf("%d ", queue[i]);
+    }
+    printf("\n");
+}
+
+int main() {
+    printf("=== QUEUE ===\n");
+
+    enqueue(1);
+    enqueue(2);
+    enqueue(3);
+
+    printQueue();
+
+    printf("Dequeue: %d\n", dequeue());
+    printQueue();
+
+    return 0;
+}
+
+
+TREE
+#include <stdio.h>
+
+#define MAX 100
+
+int tree[MAX];
+int n = 0;
+
+/* Thêm node vào cây */
+void insert(int x) {
+    n++;
+    tree[n] = x;
+}
+
+/* Duyệt tiền thứ tự */
+void preorder(int i) {
+    if (i > n) return;
+    printf("%d ", tree[i]);
+    preorder(2 * i);
+    preorder(2 * i + 1);
+}
+
+/* Duyệt trung thứ tự */
+void inorder(int i) {
+    if (i > n) return;
+    inorder(2 * i);
+    printf("%d ", tree[i]);
+    inorder(2 * i + 1);
+}
+
+/* Duyệt hậu thứ tự */
+void postorder(int i) {
+    if (i > n) return;
+    postorder(2 * i);
+    postorder(2 * i + 1);
+    printf("%d ", tree[i]);
+}
+
+int main() {
+    printf("=== TREE ===\n");
+
+    insert(1);
+    insert(2);
+    insert(3);
+    insert(4);
+    insert(5);
+
+    printf("Preorder: ");
+    preorder(1);
+    printf("\n");
+
+    printf("Inorder: ");
+    inorder(1);
+    printf("\n");
+
+    printf("Postorder: ");
+    postorder(1);
+    printf("\n");
+
+    return 0;
+}
+
+
+
+DANH SACH LIEN KET DON
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* ===== Khai báo Node ===== */
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+/* ===== Tạo 1 node mới ===== */
+Node* createNode(int x) {
+    Node* p = (Node*)malloc(sizeof(Node));
+    p->data = x;
+    p->next = NULL;
+    return p;
+}
+
+/* ===== In danh sách ===== */
+void printList(Node* head) {
+    Node* temp = head;
+    if (temp == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+/* ===== Thêm vào đầu ===== */
+void addHead(Node** head, int x) {
+    Node* p = createNode(x);
+    p->next = *head;
+    *head = p;
+}
+
+/* ===== Thêm vào cuối ===== */
+void addTail(Node** head, int x) {
+    Node* p = createNode(x);
+
+    if (*head == NULL) {
+        *head = p;
+        return;
+    }
+
+    Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = p;
+}
+
+/* ===== Thêm sau node có giá trị flag ===== */
+void addAfter(Node* head, int flag, int x) {
+    Node* temp = head;
+    while (temp != NULL && temp->data != flag) {
+        temp = temp->next;
+    }
+    if (temp == NULL) {
+        printf("Khong tim thay %d\n", flag);
+        return;
+    }
+    Node* p = createNode(x);
+    p->next = temp->next;
+    temp->next = p;
+}
+
+/* ===== Xóa đầu ===== */
+void deleteHead(Node** head) {
+    if (*head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    Node* temp = *head;
+    *head = (*head)->next;
+    free(temp);
+}
+
+/* ===== Xóa cuối ===== */
+void deleteTail(Node** head) {
+    if (*head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+
+    if ((*head)->next == NULL) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    Node* temp = *head;
+    while (temp->next->next != NULL) {
+        temp = temp->next;
+    }
+    free(temp->next);
+    temp->next = NULL;
+}
+
+/* ===== Xóa sau node có giá trị flag ===== */
+void deleteAfter(Node* head, int flag) {
+    Node* temp = head;
+    while (temp != NULL && temp->data != flag) {
+        temp = temp->next;
+    }
+    if (temp == NULL || temp->next == NULL) {
+        printf("Khong the xoa!\n");
+        return;
+    }
+    Node* del = temp->next;
+    temp->next = del->next;
+    free(del);
+}
+
+/* ===== MAIN TEST CHƯƠNG TRÌNH ===== */
+int main() {
+    Node* head = NULL;
+
+    printf("Them dau:\n");
+    addHead(&head, 3);
+    addHead(&head, 2);
+    addHead(&head, 1);
+    printList(head);
+
+    printf("\nThem cuoi:\n");
+    addTail(&head, 4);
+    addTail(&head, 5);
+    printList(head);
+
+    printf("\nThem sau 3:\n");
+    addAfter(head, 3, 99);
+    printList(head);
+
+    printf("\nXoa dau:\n");
+    deleteHead(&head);
+    printList(head);
+
+    printf("\nXoa cuoi:\n");
+    deleteTail(&head);
+    printList(head);
+
+    printf("\nXoa sau 3:\n");
+    deleteAfter(head, 3);
+    printList(head);
+
+    return 0;
+}
+
+
+
+DANH SACH LIEN KET VONG 
+#include <stdio.h>
+#include <stdlib.h>
+
+/* ===== Khai báo Node ===== */
+typedef struct Node {
+    int data;
+    struct Node* next;
+} Node;
+
+/* ===== Tạo node ===== */
+Node* createNode(int x) {
+    Node* p = (Node*)malloc(sizeof(Node));
+    p->data = x;
+    p->next = NULL;
+    return p;
+}
+
+/* ===== In danh sách vòng ===== */
+void printList(Node* head) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+    Node* temp = head;
+    do {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    } while (temp != head);
+    printf("(quay lai head)\n");
+}
+
+/* ===== Thêm vào đầu ===== */
+void addHead(Node** head, int x) {
+    Node* p = createNode(x);
+
+    if (*head == NULL) {
+        p->next = p;
+        *head = p;
+        return;
+    }
+
+    Node* temp = *head;
+    while (temp->next != *head) {
+        temp = temp->next;
+    }
+
+    p->next = *head;
+    temp->next = p;
+    *head = p;
+}
+
+/* ===== Thêm vào cuối ===== */
+void addTail(Node** head, int x) {
+    if (*head == NULL) {
+        addHead(head, x);
+        return;
+    }
+
+    Node* p = createNode(x);
+    Node* temp = *head;
+
+    while (temp->next != *head) {
+        temp = temp->next;
+    }
+
+    temp->next = p;
+    p->next = *head;
+}
+
+/* ===== Thêm sau node có giá trị flag ===== */
+void addAfter(Node* head, int flag, int x) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+
+    Node* temp = head;
+    do {
+        if (temp->data == flag) {
+            Node* p = createNode(x);
+            p->next = temp->next;
+            temp->next = p;
+            return;
+        }
+        temp = temp->next;
+    } while (temp != head);
+
+    printf("Khong tim thay %d\n", flag);
+}
+
+/* ===== Xóa đầu ===== */
+void deleteHead(Node** head) {
+    if (*head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+
+    if ((*head)->next == *head) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    Node* temp = *head;
+    while (temp->next != *head) {
+        temp = temp->next;
+    }
+
+    Node* del = *head;
+    temp->next = del->next;
+    *head = del->next;
+    free(del);
+}
+
+/* ===== Xóa cuối ===== */
+void deleteTail(Node** head) {
+    if (*head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+
+    if ((*head)->next == *head) {
+        free(*head);
+        *head = NULL;
+        return;
+    }
+
+    Node* temp = *head;
+    while (temp->next->next != *head) {
+        temp = temp->next;
+    }
+
+    Node* del = temp->next;
+    temp->next = *head;
+    free(del);
+}
+
+/* ===== Xóa sau node có giá trị flag ===== */
+void deleteAfter(Node* head, int flag) {
+    if (head == NULL) {
+        printf("Danh sach rong!\n");
+        return;
+    }
+
+    Node* temp = head;
+    do {
+        if (temp->data == flag) {
+            Node* del = temp->next;
+            temp->next = del->next;
+            free(del);
+            return;
+        }
+        temp = temp->next;
+    } while (temp != head);
+
+    printf("Khong tim thay %d\n", flag);
+}
+
+/* ===== MAIN TEST ===== */
+int main() {
+    Node* head = NULL;
+
+    printf("Them dau:\n");
+    addHead(&head, 3);
+    addHead(&head, 2);
+    addHead(&head, 1);
+    printList(head);
+
+    printf("\nThem cuoi:\n");
+    addTail(&head, 4);
+    addTail(&head, 5);
+    printList(head);
+
+    printf("\nThem sau 3:\n");
+    addAfter(head, 3, 99);
+    printList(head);
+
+    printf("\nXoa dau:\n");
+    deleteHead(&head);
+    printList(head);
+
+    printf("\nXoa cuoi:\n");
+    deleteTail(&head);
+    printList(head);
+
+    printf("\nXoa sau 3:\n");
+    deleteAfter(head, 3);
+    printList(head);
+
+    return 0;
+}
